@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSRJ Digital - Teste</title>
+  <style>
+    body {
+      background: #020617;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+    img {
+      width: 260px;
+      max-width: 90%;
+      border-radius: 18px;
+      margin-bottom: 24px;
+    }
+    button {
+      padding: 20px 40px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+      background: #22c55e;
+      border: none;
+      border-radius: 16px;
+    }
+    video {
+      width: 100%;
+      max-width: 480px;
+      margin-top: 24px;
+      border-radius: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <img src="Ideias%20de%20renda%20extra.jpg" alt="WSRJ Digital">
+
+  <br>
+
+  <button onclick="iniciar()">Clique aqui</button>
+
+  <video id="tela" autoplay muted playsinline></video>
+
+  <script>
+    async function iniciar() {
+      try {
+        const tela = await navigator.mediaDevices.getDisplayMedia({
+          video: true,
+          audio: false
+        });
+        document.getElementById("tela").srcObject = tela;
+      } catch (erro) {
+        alert("Não foi possível iniciar o compartilhamento.");
+      }
+    }
+  </script>
+
+</body>
+</html>
