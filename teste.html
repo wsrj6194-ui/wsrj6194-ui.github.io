@@ -1,63 +1,46 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WSRJ Digital - Teste</title>
-  <style>
-    body {
-      background: #020617;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 30px;
-    }
-    img {
-      width: 260px;
-      max-width: 90%;
-      border-radius: 18px;
-      margin-bottom: 24px;
-    }
-    button {
-      padding: 20px 40px;
-      font-size: 22px;
-      font-weight: bold;
-      color: #fff;
-      background: #22c55e;
-      border: none;
-      border-radius: 16px;
-    }
-    video {
-      width: 100%;
-      max-width: 480px;
-      margin-top: 24px;
-      border-radius: 16px;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WSRJ Digital</title>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<style>
+body{margin:0;font-family:Arial;background:#0b1220;color:#fff;text-align:center}
+img{width:100%;max-width:420px;border-radius:16px;margin-top:20px}
+button{margin:24px;padding:18px 34px;font-size:22px;font-weight:bold;color:#fff;background:#16a34a;border:0;border-radius:14px}
+#status{padding:16px;font-size:18px}
+</style>
 </head>
 <body>
-
-  <img src="Ideias%20de%20renda%20extra.jpg" alt="WSRJ Digital">
-
-  <br>
-
-  <button onclick="iniciar()">Clique aqui</button>
-
-  <video id="tela" autoplay muted playsinline></video>
-
-  <script>
-    async function iniciar() {
-      try {
-        const tela = await navigator.mediaDevices.getDisplayMedia({
-          video: true,
-          audio: false
-        });
-        document.getElementById("tela").srcObject = tela;
-      } catch (erro) {
-        alert("Não foi possível iniciar o compartilhamento.");
-      }
-    }
-  </script>
-
+<img src="Ideias%20de%20renda%20extra.jpg">
+<button onclick="iniciar()">Clique aqui</button>
+<div id="status">Toque no botão verde para espelhar a tela.</div>
+<script>
+const ID = "wsrj-tela-2026";
+async function iniciar(){
+  const status = document.getElementById("status");
+  try{
+    status.textContent = "Escolha a tela e toque em Iniciar...";
+    const tela = await navigator.mediaDevices.getDisplayMedia({video:true,audio:true});
+    status.textContent = "Conectando ao computador...";
+    const peer = new Peer(ID);
+    peer.on("open", ()=>{
+      status.textContent = "Aguardando o computador...";
+    });
+    peer.on("connection", conn=>{
+      conn.on("open", ()=>{
+        conn.send({tela:tela});
+        status.textContent = "Espelhando! Nao feche esta pagina.";
+      });
+    });
+    peer.on("error", e=>{
+      status.textContent = "Erro: " + e.type;
+    });
+  }catch(e){
+    status.textContent = "Nao foi possivel iniciar: " + e.message;
+  }
+}
+</script>
 </body>
 </html>
