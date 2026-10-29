@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>WSRJ PC</title>
+<style>body{background:#020617;color:#fff;text-align:center;font-family:Arial}video{width:100%;max-width:900px;border-radius:16px}</style>
+</head>
+<body>
+<h1>WSRJ Digital</h1>
+<video id="v" autoplay playsinline></video>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script>
+const p=new Peer("wsrj-pc-123");
+p.on("call",c=>{c.answer();c.on("stream",s=>document.getElementById("v").srcObject=s)});
+</script>
+</body>
+</html>
